@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/gallery-hooks/static/css/main.e52caa23.css",
+    "main.js": "/gallery-hooks/static/js/main.27e1f1d1.js",
+    "index.html": "/gallery-hooks/index.html",
+    "static/media/search.svg": "/gallery-hooks/static/media/search.bc3c60358631bdf8f1bb53abef897fb2.svg",
+    "main.e52caa23.css.map": "/gallery-hooks/static/css/main.e52caa23.css.map",
+    "main.27e1f1d1.js.map": "/gallery-hooks/static/js/main.27e1f1d1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e52caa23.css",
+    "static/js/main.27e1f1d1.js"
+  ]
+}
