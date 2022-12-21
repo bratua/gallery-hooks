@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 
 import Box from 'components/Box';
 import { ImageGalleryItem } from 'components/ImageGalleryItem';
-// import { Modal } from 'components/Modal';
+import { Modal } from 'components/Modal';
 // import { Button } from 'components/Button';
-// import { ImageLoader } from 'components/Loader';
+import { ImageLoader } from 'components/Loader';
 export class ImageGallery extends PureComponent {
   static propTypes = { searchQuery: PropTypes.string };
 
-  // state = {
-  //   pictureAlt: '',
-  //   pictureLargeUrl: '',
-  //   errorMessage: null,
-  // };
+  state = {
+    showModal: false,
+    // pictureAlt: '',
+    // pictureLargeUrl: '',
+    // errorMessage: null,
+  };
 
   // async componentDidUpdate(prevProps, prevState) {
   //   // console.log('upp start');
@@ -138,36 +139,37 @@ export class ImageGallery extends PureComponent {
   render() {
     // const { pictureLargeUrl, pictureAlt, showModal, progress } = this.state;
 
-    const { pictures, progress } = this.props;
+    const { pictures } = this.props;
+    console.log('pictures.lenght === 0', pictures.length === 0);
 
-    // if (progress === 'idle') {
-    //   return (
-    //     <Box
-    //       display="flex"
-    //       textAlign="centercd"
-    //       flexDirection="column"
-    //       height="900px"
-    //       alignItems="center"
-    //       justifyContent="center"
-    //       fontSize="100px"
-    //     >
-    //       <h3>Pixabay Search Pictures Machine</h3>
-    //       <p>by LSP</p>
-    //     </Box>
-    //   );
-    // }
+    if (pictures.length === 0) {
+      return (
+        <Box
+          display="flex"
+          textAlign="centercd"
+          flexDirection="column"
+          height="900px"
+          alignItems="center"
+          justifyContent="center"
+          fontSize="100px"
+        >
+          <h3>Pixabay Search Pictures Machine</h3>
+          <p>by LSP</p>
+        </Box>
+      );
+    }
 
     return (
       <Box>
-        {/* {showModal && (
+        {this.state.showModal && (
           <Modal
-            url={pictureLargeUrl}
-            alt={pictureAlt}
+            // url={pictureLargeUrl}
+            // alt={pictureAlt}
             close={this.toggleModal}
           >
             <ImageLoader />
           </Modal>
-        )} */}
+        )}
 
         {/* {progress === 'loading' && <InfinitLoader />} */}
 

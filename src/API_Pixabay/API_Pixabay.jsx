@@ -13,6 +13,6 @@ export const getQueryPicture = async (query, page) => {
 
   const hits = response.data.hits;
   const stats = response.data.totalHits;
-  console.log('api', url);
+  // console.log('api', url);
   return { hits, stats };
 };

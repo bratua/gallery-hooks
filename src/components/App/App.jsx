@@ -5,6 +5,7 @@ import * as API from 'API_Pixabay/API_Pixabay';
 import 'react-toastify/dist/ReactToastify.css';
 import { SearchBar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
+import { Button } from 'components/Button';
 
 export class App extends PureComponent {
   state = {
@@ -167,6 +168,20 @@ export class App extends PureComponent {
           pauseOnHover
           theme="dark"
         />
+
+        {this.state.progress === 'loaded' && (
+          <Button
+            type="button"
+            className="Button"
+            disabled={
+              this.state.pictures.length < 12 ||
+              this.state.pictures.length % 12 !== 0
+            }
+            onClick={this.onNext}
+          >
+            Next
+          </Button>
+        )}
       </Box>
     );
   }

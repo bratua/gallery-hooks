@@ -42,12 +42,16 @@ export class ImageGalleryItem extends PureComponent {
 
   render() {
     const { imgUrl, tags, largeImageURL, imgId } = this.props;
-    const { showModal } = this.setState;
+    const { showModal, pictureAlt, pictureLargeUrl } = this.state;
 
     return (
-      <>
+      <Box>
         {showModal && (
-          <Modal url={largeImageURL} alt={tags} close={this.toggleModal}>
+          <Modal
+            url={pictureLargeUrl}
+            alt={pictureAlt}
+            close={this.toggleModal}
+          >
             <ImageLoader />
           </Modal>
         )}
@@ -67,7 +71,7 @@ export class ImageGalleryItem extends PureComponent {
             />
           </Box>
         </li>
-      </>
+      </Box>
     );
   }
 }
