@@ -16,6 +16,7 @@ export class App extends PureComponent {
     imagesLeft: null,
     imagesInQuery: null,
     scrollToId: null,
+    statsQuery: null,
   };
 
   componentDidMount() {
@@ -33,7 +34,7 @@ export class App extends PureComponent {
     }
     // console.log('upp end');
 
-    if (this.props.searchQuery !== prevProps.searchQuery) {
+    if (this.state.searchQuery !== prevState.searchQuery) {
       this.setState({ pictures: [], page: 1 });
       await this.getPictures();
       this.showStats();
@@ -63,10 +64,10 @@ export class App extends PureComponent {
   };
 
   onLoadImgCheck = loadStatus => {
-    console.log(loadStatus);
+    // console.log(loadStatus);
     if (loadStatus) {
-      this.setState(prevProps => ({
-        picturesCount: prevProps.picturesCount - 1,
+      this.setState(state => ({
+        picturesCount: state.picturesCount - 1,
       }));
       this.onLoad();
       return;
@@ -74,12 +75,13 @@ export class App extends PureComponent {
   };
 
   getPictures = async () => {
+    // let { pictures, statsQuery } = this.state;
     let pictures = [];
     let statsQuery = null;
     try {
       this.setState({ progress: 'loading' });
       const apiResponse = await API.getQueryPicture(
-        this.props.searchQuery,
+        this.state.searchQuery,
         this.state.page
       );
       pictures = apiResponse.hits;
@@ -103,9 +105,11 @@ export class App extends PureComponent {
       });
       return;
     }
+    console.log('pictures', pictures);
+    console.log('statsQuery', statsQuery);
 
-    this.setState(prevProps => ({
-      pictures: [...prevProps.pictures, ...pictures],
+    this.setState(prevState => ({
+      pictures: [...prevState.pictures, ...pictures],
       scrollToId: pictures[0].id,
       picturesCount: pictures.length,
       imagesInQuery: statsQuery,
@@ -148,6 +152,7 @@ export class App extends PureComponent {
         <ImageGallery
           pictures={this.state.pictures}
           progress={this.state.progress}
+          onLoadImg={this.onLoadImgCheck}
         />
 
         <ToastContainer

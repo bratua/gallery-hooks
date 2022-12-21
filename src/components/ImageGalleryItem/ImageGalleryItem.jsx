@@ -10,7 +10,7 @@ export class ImageGalleryItem extends PureComponent {
     imgId: PropTypes.string,
     tags: PropTypes.string,
     onPreview: PropTypes.func,
-    onLoad: PropTypes.func,
+    // onLoad: PropTypes.func,
   };
 
   state = {
@@ -39,7 +39,7 @@ export class ImageGalleryItem extends PureComponent {
             className="ImageGalleryItem-image"
             src={imgUrl}
             alt={tags}
-            onLoad={this.checkImgLoad}
+            onLoad={this.props.onLoadImg}
           />
         </Box>
       </li>
