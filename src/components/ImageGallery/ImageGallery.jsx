@@ -9,12 +9,11 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem';
 export class ImageGallery extends PureComponent {
   static propTypes = { searchQuery: PropTypes.string };
 
-  state = {
-    showModal: false,
-    pictureAlt: '',
-    pictureLargeUrl: '',
-    errorMessage: null,
-  };
+  // state = {
+  //   pictureAlt: '',
+  //   pictureLargeUrl: '',
+  //   errorMessage: null,
+  // };
 
   // async componentDidUpdate(prevProps, prevState) {
   //   // console.log('upp start');
@@ -108,14 +107,14 @@ export class ImageGallery extends PureComponent {
   //   }));
   // };
 
-  onPreview = (url, alt) => {
-    this.setState({ pictureAlt: alt, pictureLargeUrl: url });
-    this.toggleModal();
-  };
+  // onPreview = (url, alt) => {
+  //   this.setState({ pictureAlt: alt, pictureLargeUrl: url });
+  //   this.toggleModal();
+  // };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-  };
+  // toggleModal = () => {
+  //   this.setState(({ showModal }) => ({ showModal: !showModal }));
+  // };
 
   // onLoad = () => {
   //   setTimeout(() => {
@@ -180,8 +179,8 @@ export class ImageGallery extends PureComponent {
               largeImageURL={largeImageURL}
               imgId={id}
               tags={tags}
-              onPreview={this.onPreview}
-              onLoad={this.onLoadImgCheck}
+              // onPreview={this.onPreview}
+              onLoad={this.props.onLoadImg}
             />
           ))}
         </ul>

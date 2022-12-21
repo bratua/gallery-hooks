@@ -11,9 +11,11 @@ export class Modal extends PureComponent {
     url: PropTypes.string,
     alt: PropTypes.string,
   };
+
   state = {
     imgLoaded: false,
   };
+
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }
