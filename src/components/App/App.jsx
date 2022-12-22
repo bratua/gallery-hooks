@@ -7,7 +7,7 @@ import { SearchBar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { Button } from 'components/Button';
 
-const IMAGES_PER_PAGE = 12;
+const IMAGES_PER_PAGE = 3;
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,72 +21,38 @@ const App = () => {
   // const [statsQuery, setStatsQuery] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // componentDidMount() {
-  //   this.setState({ searchQuery: '' });
-  // }
-
-  // async componentDidUpdate(prevProps, prevState) {
-  //   // console.log('upp start');
-  // if (this.state.page !== prevState.page) {
-  //   await this.getPictures();
-  //   await this.scrollNextPage();
-  //   await this.showStats();
-
-  //   // this.onLoad();
-  // }
-  // // console.log('upp end');
-
-  // if (this.state.searchQuery !== prevState.searchQuery) {
-  //   this.setState({ pictures: [], page: 1 });
-  //   await this.getPictures();
-  //   this.showStats();
-  // }
-  // }
-
   const onSearch = query => {
     if (query === searchQuery) {
       return;
     }
     setSearchQuery(query);
+    setImagesLeft(imagesInQuery);
   };
 
   const onNext = () => {
     setPage(page => page + 1);
     setImagesLeft(imagesInQuery - page * IMAGES_PER_PAGE);
-
-    // this.setState(prev => ({
-    //   page: prev.page + 1,
-    //   imagesLeft: prev.imagesInQuery - this.state.page * 12,
-    // }));
-  };
-
-  const onLoad = () => {
-    setTimeout(() => {
-      if (picturesCount === 0) {
-        setProgress('loaded');
-      }
-    }, 0);
   };
 
   const onLoadImgCheck = loadStatus => {
-    // console.log(loadStatus);
     if (loadStatus) {
+      // console.log('picturesCount BEFORE', picturesCount);
       setPicturesCount(count => count - 1);
-      // this.setState(state => ({
-      //   picturesCount: state.picturesCount - 1,
-      // }));
-      onLoad();
+      console.log('picturesCount', picturesCount);
       return;
     }
   };
 
   async function getPictures(searchQuery, page) {
-    // let { pictures, statsQuery } = this.state;
     let pictures = [];
     let statsQuery = null;
     try {
       setProgress('loading');
-      const apiResponse = await API.getQueryPicture(searchQuery, page);
+      const apiResponse = await API.getQueryPicture(
+        searchQuery,
+        page,
+        IMAGES_PER_PAGE
+      );
 
       pictures = apiResponse.hits;
       statsQuery = apiResponse.stats;
@@ -112,7 +78,7 @@ const App = () => {
     setImagesInQuery(statsQuery);
   }
 
-  const showStats = async () => {
+  const showStats = () => {
     setTimeout(() => {
       let totalPages = Math.ceil(imagesInQuery / IMAGES_PER_PAGE);
       let pagesLeft = totalPages - page;
@@ -132,30 +98,45 @@ const App = () => {
     }, 0);
   };
 
-  const scrollNextPage = async () => {
+  const scrollNextPage = targetId => {
     setTimeout(() => {
-      const target = scrollToId;
-      const targetItem = document.getElementById(`${target}`);
+      // const target = scrollToId;
+      const targetItem = document.getElementById(`${targetId}`);
       targetItem.scrollIntoView();
     }, 0);
   };
 
-  // useEffect(() => {
-  //   setSearchQuery('');
-  // }, []);
+  useEffect(() => {
+    setSearchQuery('');
+  }, []);
 
   useEffect(() => {
     setPictures([]);
     setPage(1);
-    // getPictures();
-    // showStats();
   }, [searchQuery]);
 
   useEffect(() => {
+    if (!searchQuery) {
+      return;
+    }
     getPictures(searchQuery, page);
-    // scrollNextPage();
-    // showStats();
   }, [page, searchQuery]);
+
+  useEffect(() => {
+    if (picturesCount === 0) {
+      setProgress('loaded');
+    }
+  }, [picturesCount]);
+
+  useEffect(() => {
+    if (scrollToId) {
+      scrollNextPage(scrollToId);
+    }
+  }, [scrollToId]);
+
+  useEffect(() => {
+    showStats();
+  }, [imagesLeft]);
 
   return (
     <Box className="App">
