@@ -25,23 +25,6 @@ const App = () => {
   //   this.setState({ searchQuery: '' });
   // }
 
-  useEffect(() => {
-    setSearchQuery('');
-  }, []);
-
-  useEffect(() => {
-    getPictures();
-    scrollNextPage();
-    showStats();
-  }, [page]);
-
-  useEffect(() => {
-    setPictures([]);
-    setPage(1);
-    getPictures();
-    showStats();
-  }, [searchQuery]);
-
   // async componentDidUpdate(prevProps, prevState) {
   //   // console.log('upp start');
   // if (this.state.page !== prevState.page) {
@@ -156,6 +139,23 @@ const App = () => {
       targetItem.scrollIntoView();
     }, 0);
   };
+
+  // useEffect(() => {
+  //   setSearchQuery('');
+  // }, []);
+
+  useEffect(() => {
+    setPictures([]);
+    setPage(1);
+    // getPictures();
+    // showStats();
+  }, [searchQuery]);
+
+  useEffect(() => {
+    getPictures(searchQuery, page);
+    // scrollNextPage();
+    // showStats();
+  }, [page, searchQuery]);
 
   return (
     <Box className="App">
