@@ -1,59 +1,55 @@
-import { PureComponent } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-// import { InfinitySpin } from 'react-loader-spinner';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export class Modal extends PureComponent {
-  static propTypes = {
-    close: PropTypes.func,
-    url: PropTypes.string,
-    alt: PropTypes.string,
-  };
+const Modal = ({ url, alt, close, children }) => {
+  const [imgLoaded, setImgLoaded] = useState(false);
 
-  state = {
-    imgLoaded: false,
-  };
+  useEffect(() => {
+    console.log('add listner keydown');
+    window.addEventListener('keydown', handleKeyDown);
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+    return () => {
+      console.log('dell listner keydown');
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = event => {
+  const handleKeyDown = event => {
     if (event.code === 'Escape') {
-      this.props.close();
+      close();
     }
   };
 
-  handleOverlayClick = event => {
+  const handleOverlayClick = event => {
     if (event.currentTarget === event.target) {
-      this.props.close();
+      close();
     }
   };
 
-  onLoad = e => {
+  const onLoad = e => {
     if (e.type === 'load') {
-      this.setState(({ imgLoaded }) => ({
-        imgLoaded: !imgLoaded,
-      }));
+      setImgLoaded(true);
     }
   };
 
-  render() {
-    const { url, alt, children } = this.props;
-    return createPortal(
-      <div className="Overlay" onClick={this.handleOverlayClick}>
-        <div className="Modal">
-          {!this.state.imgLoaded && children}
-          <img src={url} alt={alt} onLoad={this.onLoad} />
-        </div>
-      </div>,
-      modalRoot
-    );
-  }
-}
+  return createPortal(
+    <div className="Overlay" onClick={handleOverlayClick}>
+      <div className="Modal">
+        {!imgLoaded && children}
+        <img src={url} alt={alt} onLoad={onLoad} />
+      </div>
+    </div>,
+    modalRoot
+  );
+};
+
+export { Modal };
+
+Modal.propTypes = {
+  close: PropTypes.func,
+  url: PropTypes.string,
+  alt: PropTypes.string,
+};

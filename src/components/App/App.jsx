@@ -152,7 +152,6 @@ export class App extends PureComponent {
 
         <ImageGallery
           pictures={this.state.pictures}
-          progress={this.state.progress}
           onLoadImg={this.onLoadImgCheck}
         />
 
