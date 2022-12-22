@@ -10,10 +10,12 @@ import { Button } from 'components/Button';
 const IMAGES_PER_PAGE = 3;
 
 const App = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [pictures, setPictures] = useState([]);
-  const [picturesCount, setPicturesCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
+
+  const [picturesCount, setPicturesCount] = useState(0);
+
   const [progress, setProgress] = useState('idle');
   const [imagesLeft, setImagesLeft] = useState(null);
   const [imagesInQuery, setImagesInQuery] = useState(null);
@@ -35,10 +37,11 @@ const App = () => {
   };
 
   const onLoadImgCheck = loadStatus => {
+    console.log('picturesCount', picturesCount);
     if (loadStatus) {
       // console.log('picturesCount BEFORE', picturesCount);
       setPicturesCount(count => count - 1);
-      console.log('picturesCount', picturesCount);
+
       return;
     }
   };
@@ -75,6 +78,7 @@ const App = () => {
     setPictures(prevPictures => [...prevPictures, ...pictures]);
     setScrollToId(pictures[0].id);
     setPicturesCount(pictures.length);
+    console.log('pictures.length', pictures.length);
     setImagesInQuery(statsQuery);
   }
 
@@ -119,6 +123,8 @@ const App = () => {
     if (!searchQuery) {
       return;
     }
+    // setImagesLeft(imagesInQuery - page * IMAGES_PER_PAGE);
+
     getPictures(searchQuery, page);
   }, [page, searchQuery]);
 
@@ -134,9 +140,9 @@ const App = () => {
     }
   }, [scrollToId]);
 
-  useEffect(() => {
-    showStats();
-  }, [imagesLeft]);
+  // useEffect(() => {
+  //   showStats();
+  // }, [imagesLeft]);
 
   return (
     <Box className="App">
