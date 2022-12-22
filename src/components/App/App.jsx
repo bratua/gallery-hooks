@@ -18,7 +18,7 @@ const App = () => {
   const [scrollToId, setScrollToId] = useState(null);
   const [statsQuery, setStatsQuery] = useState(null);
 };
-
+export { App };
 // export class App extends PureComponent {
 //   state = {
 //     searchQuery: '',
