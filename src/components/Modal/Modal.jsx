@@ -15,7 +15,7 @@ const Modal = ({ url, alt, close, children }) => {
       console.log('dell listner keydown');
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  });
 
   const handleKeyDown = event => {
     if (event.code === 'Escape') {
