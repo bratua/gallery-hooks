@@ -24,6 +24,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const onSearch = query => {
+    console.log('onSearch', query);
     if (query === searchQuery) {
       return;
     }
@@ -34,53 +35,55 @@ const App = () => {
   const onNext = () => {
     setPage(page => page + 1);
     setImagesLeft(imagesInQuery - page * IMAGES_PER_PAGE);
+    console.log('onNext', page);
   };
 
   const onLoadImgCheck = loadStatus => {
-    console.log('picturesCount', picturesCount);
     if (loadStatus) {
-      // console.log('picturesCount BEFORE', picturesCount);
+      console.log('onLoadImgCheck (IF true)', picturesCount);
       setPicturesCount(count => count - 1);
-
       return;
     }
   };
 
-  async function getPictures(searchQuery, page) {
-    let pictures = [];
-    let statsQuery = null;
-    try {
-      setProgress('loading');
-      const apiResponse = await API.getQueryPicture(
-        searchQuery,
-        page,
-        IMAGES_PER_PAGE
-      );
+  // async function getPictures(searchQuery, page) {
+  //   console.log('get picture start');
+  //   let pictures = [];
+  //   let statsQuery = null;
+  //   try {
+  //     setProgress('loading');
+  //     const apiResponse = await API.getQueryPicture(
+  //       searchQuery,
+  //       page,
+  //       IMAGES_PER_PAGE
+  //     );
 
-      pictures = apiResponse.hits;
-      statsQuery = apiResponse.stats;
+  //     pictures = apiResponse.hits;
+  //     statsQuery = apiResponse.stats;
+  //     console.log('GETpictures length = ', pictures.length);
 
-      if (pictures.length === 0) {
-        // console.log('No images!');
-        throw new Error(`${searchQuery} Картинок по зпросу не найдено!`);
-      }
-    } catch (error) {
-      setErrorMessage(error.message);
-      setProgress('idle');
+  //     if (pictures.length === 0) {
+  //       // console.log('No images!');
+  //       throw new Error(`${searchQuery} Картинок по зпросу не найдено!`);
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage(error.message);
+  //     setProgress('idle');
 
-      toast.error(errorMessage, {
-        position: 'top-right',
-      });
+  //     toast.error(errorMessage, {
+  //       position: 'top-right',
+  //     });
 
-      return;
-    }
+  //     return;
+  //   }
 
-    setPictures(prevPictures => [...prevPictures, ...pictures]);
-    setScrollToId(pictures[0].id);
-    setPicturesCount(pictures.length);
-    console.log('pictures.length', pictures.length);
-    setImagesInQuery(statsQuery);
-  }
+  //   setPictures(prevPictures => [...prevPictures, ...pictures]);
+  //   setScrollToId(pictures[0].id);
+  //   setPicturesCount(pictures.length);
+  //   setImagesInQuery(statsQuery);
+
+  //   console.log('get picture end');
+  // }
 
   const showStats = () => {
     setTimeout(() => {
@@ -111,19 +114,61 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log('effect did mount');
     setSearchQuery('');
   }, []);
 
   useEffect(() => {
-    setPictures([]);
+    console.log('effect serch');
     setPage(1);
+    setPictures([]);
   }, [searchQuery]);
 
   useEffect(() => {
+    console.log('effect serch+page');
+
+    async function getPictures(searchQuery, page) {
+      console.log('get picture start');
+      let pictures = [];
+      let statsQuery = null;
+      try {
+        setProgress('loading');
+        const apiResponse = await API.getQueryPicture(
+          searchQuery,
+          page,
+          IMAGES_PER_PAGE
+        );
+
+        pictures = apiResponse.hits;
+        statsQuery = apiResponse.stats;
+        console.log('GETpictures length = ', pictures.length);
+
+        if (pictures.length === 0) {
+          // console.log('No images!');
+          throw new Error(`${searchQuery} Картинок по зпросу не найдено!`);
+        }
+      } catch (error) {
+        // setErrorMessage(error.message);
+        setProgress('idle');
+
+        toast.error(error.message, {
+          position: 'top-right',
+        });
+
+        return;
+      }
+
+      setPictures(prevPictures => [...prevPictures, ...pictures]);
+      setScrollToId(pictures[0].id);
+      setPicturesCount(pictures.length);
+      setImagesInQuery(statsQuery);
+
+      console.log('get picture end');
+    }
+
     if (!searchQuery) {
       return;
     }
-    // setImagesLeft(imagesInQuery - page * IMAGES_PER_PAGE);
 
     getPictures(searchQuery, page);
   }, [page, searchQuery]);
